@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<!--
+ * Armanelgtron Solitaire
+ * Copyright (C) 2016 Glen Harpring
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+-->
+<html>
+<head>
+<title>Armanelgtron Solitaire</title>
+<link rel=stylesheet href="src/main.css" />
+<script type="text/javascript" src="src/compatibility.js"></script>
+<script>if(typeof(console) == "undefined") console = window.console; </script>
+<script type="text/javascript" src="src/core.js"></script>
+<script type="text/javascript" src="src/ui.js"></script>
+<script type="text/javascript" src="src/importexport.js"></script>
+<script type="text/javascript" src="src/game.js"></script>
+
+<script type="text/javascript" src="src/games/selector.js"></script>
+<script type="text/javascript" src="src/games/klondike.js"></script>
+<script>
+class Dialog
+{
+	constructor()
+	{
+		this.e = {};
+		this.resize(500,500);
+		this.e.innerHTML = '';
+	}
+	setHTML(html) { this.e.innerHTML = html; }
+	setText(text) { this.e.innerText = text; }
+	getHTML() { return this.e.innerHTML; }
+	getText() { return this.e.innerText; }
+	append() { return this.e.append.apply(this.e,arguments); }
+	resize(x,y)
+	{
+		this.e.style.width  = x+'px';
+		this.e.style.height = y+'px';
+		if(y > height) y = height;
+		if(x > width) x = width;
+		this.e.style.marginTop  = -(y/2)+'px';
+		this.e.style.marginLeft = -(x/2)+'px';
+	}
+	hide() { this.style.display = 'none'; }
+	show() { this.style.display = 'block'; }
+	isOpen() { return (document.getElementById("dialog").style.display != "none"); }
+}
+</script>
+</head>
+<body>
+<div id="blocker"><img src="/other-icons/loading-blue-black.gif"/></div>
+<div class="title">
+	<b>Solitaire</b>
+	<a class="activateMenu" href="javascript:void(0);" menu="file">File</a>
+	<a class="activateMenu" href="javascript:void(0);" menu="tools">Tools</a>
+	<a class="activateMenu" href="javascript:void(0);" menu="help">Help</a>
+</div>
+<div class="menu" name="file" style="left:94px">
+	<a href="javascript:ui.newDeal();"><img src="/user-icons/crystalsvg/16x16/actions/add.png" />New Deal</a>
+	<a href="javascript:ui.importDeal();"><img src="/user-icons/crystalproject/16x16/actions/fileimport.png" />Import Deal</a>
+</div>
+<div class="menu" name="tools" style="left:149px">
+	<label title="Watch the game solve itself!"><input type="checkbox" id="autosolve" title="Watch the game attempt to solve itself! And often fail!" onclick="aicursor.style.display = 'none'" />Auto-solver (beta)</label>
+	<label title="Automatically drop cards into the foundation. It may not properly work if you click too rapidly on the talon."><input type="checkbox" id="autofoundation"/>Enable autodrop</label>
+</div>
+<div class="menu" name="help" style="left:213px">
+	<a href="javascript:ui.help();"><img src="/user-icons/crystalsvg/16x16/actions/help.png" />Help</a>
+	<a href="javascript:ui.about();" onclick="welcome.style.display = 'block';"><img src="/user-icons/crystalsvg/16x16/actions/info.png" />About</a>
+</div>
+<div class="ui tool">
+	<!--<a onclick="newGame();draw()" href="javascript:{}"><img src="/user-icons/crystalproject/22x22/actions/filenew.png" /><span style="inline-block">New<br>Game</span></a>-->
+	<!--<a onclick="var s=prompt('Are you sure you want a new deal?'); if(s != null && s.charAt(0).toLowerCase() != 'n') newGame();draw()" href="javascript:{}"><img src="/user-icons/crystalproject/22x22/actions/edit_add.png" /><span>New Deal</span></a>-->
+	<a href="javascript:ui.newGame();"><img src="/user-icons/Crystal/22x22/actions/filenew2.png" /><span>New Game</span></a>
+	<a href="javascript:ui.newDeal();"><img src="/user-icons/crystalproject/22x22/actions/edit_add.png" /><span>New Deal</span></a>
+	<a href="javascript:ui.restart();"><img src="/user-icons/crystalproject/22x22/actions/restart-1.png" /><span>Restart</span></a>
+	<a name="undo" onclick="undo()" ><img src="/user-icons/crystalproject/22x22/actions/undo.png" /><span>Undo</span></a>
+	<a name="redo" onclick="redo()" ><img src="/user-icons/crystalproject/22x22/actions/redo.png" /><span>Redo</span></a>
+	<a href="javascript:hint();"><img src="/user-icons/crystalproject/24x24/actions/wizard.png" /><span>Hint</span></a>
+	<a href="javascript:menu();" style="position:absolute;right:0;width:24px;height:24px;">&nbsp;</a>
+</div>
+<div id="menu">
+<span title="Watch the game solve itself!">
+	<label for="autosolve">Auto-solver (beta)</label>
+</span>
+<span title="Automatically drop cards into the foundation. It may not properly work if you click too rapidly on the talon."><label for="autofoundation">Enable autodrop</label></span>
+<span><a href="javascript:void(0)" onclick="autoSolveTest('noflip');menu()" title="Automagically decide what to do next. Does nothing if it doesn't know."><img src="/user-icons/crystalproject/16x16/actions/run.png" />Make next move</a></span>
+<span><a href="javascript:void(0)" onclick="welcome.style.display = 'block';menu()" ><img src="/user-icons/crystalproject/16x16/actions/info.png" />About</a></span>
+</div>
+<canvas id="game"></canvas>
+<div id="welcome" class="dialog"><h3>Introduction</h3>Klondike is a classic single-player game. Place cards of alternating colors in descending order on the 7 the playing piles. Place cards in ascending order on the foundation. The foundation will be where all cards should end up if you succeed.<br>This version of the game was written by Armanelgtron and is licensed under the GNU GPL.
+<br><b>Current Issues:</b>
+<br>&bull; Moving piles of cards is rough
+<br>&bull; Undo/redo can occasionally lead to a desynced game
+<br>&bull; Auto solver doesn't always behave as it should
+<br>&bull; Score doesn't really mean much
+<button class="accept b r" onclick='document.getElementById("blocker").style.display="none";setTimeout(function(){welcome.style.display = "none";},50)'>Alright!</button></div>
+<div id="won" class="dialog" style="display:none"><h1>Congratulations!</h1><br></div>
+<div class="ui score"><span style="position:absolute;left:3px">DealID:<span id="deal">0</span></span>Time:<span id="time">0:00</span> Score:<span id="score">0</span></div>
+<!--<img id="aicursor" src="/user-icons/elegant_font/images/PNG/icon_cursor.png" style="position:absolute;display:none;user-select: none;" draggable="false"/>-->
+<img id="aicursor" src="./image/cursor.png" style="position:absolute;display:none;user-select:none;" draggable="false"/>
+</body>
+</html>

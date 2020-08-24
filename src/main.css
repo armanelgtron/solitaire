@@ -1,0 +1,201 @@
+html,body
+{
+	background:#00aa00;
+	margin:0px;
+	overflow:hidden;
+}
+#blocker
+{
+	display:block;
+	background:black; background:rgba(0,0,0,0.9);
+	position:absolute;
+	top:0;left:0;bottom:0;right:0;
+	color:white;
+}
+#blocker img
+{
+	position:absolute;
+	top:50%;left:50%;
+	margin:-32px 0px 0px -32px;
+	background:black;border-radius:16px;
+}
+
+.title
+{
+	padding-left:10px;
+	text-align:left;
+	/*background:#0000aa;*/
+	background-image: linear-gradient(#00a,#00c);
+	color:white;
+	font-size:0;
+}
+.title b
+{
+	padding-right:6pt;
+	font-family:sans-serif;
+	font-size:12pt;
+}
+.title a
+{
+	color:white;
+	font-family:monospace;
+	font-size:12pt;
+	text-decoration:none;
+	transition:background 0.15s;
+}
+
+.title a:hover
+{
+	background:#00c;
+}
+
+.title a:active, .title a:focus
+{
+	/*color:silver;*/
+	background:#88f;
+	outline:none;
+}
+
+.ui
+{
+	background:#ddd;
+	background-image: linear-gradient(#ddd,#ccc);
+	box-shadow:0px 1px 3px #fff;
+}
+.ui.tool
+{
+	text-align:left;
+}
+.ui.tool a
+{
+	vertical-align:middle;
+	font-family:sans-serif;
+	font-size:10pt;
+	height:24px;
+	display:inline-block;
+	padding:4px;
+	color:black;
+	text-decoration:none;
+	border-radius:3px;
+	transition:background 0.15s;
+}
+.ui.tool a:hover
+{
+	background-color:rgb(255,255,255,0.8);
+}
+
+.ui.tool img
+{
+	min-height:22px;
+	/*padding-top: calc(var(height) - 22px); /* figure out how to do this */
+}
+
+.ui.tool a span
+{
+	vertical-align:middle;
+	display:inline-block;
+	padding-left:2px;
+	height:24px;
+	position:relative;top:-3px;
+}
+
+.menu
+{
+	position:absolute;
+	display:none;
+	/*background-image: linear-gradient(#4848FF,#ccf,#ccf);*/
+	background:#88f;
+	background-image: linear-gradient(#88f,#ddd,#ddd);
+	z-index:1000;
+	/*padding:2px;*/
+	padding:5px;
+	border-radius:0px 0px 4px 4px;
+}
+.menu span, .menu a, .menu label
+{
+	display:block;
+	color:black;
+	text-decoration:none;
+	min-width:128px;
+}
+
+.menu span:hover, .menu a:hover, .menu label:hover
+{
+	background:white;
+}
+
+.activateMenu
+{
+	padding:0 6pt;
+}
+
+#menu
+{
+	position:absolute;
+	/*right:0;*/
+	background:silver;
+	width:200px;
+	/*height:200px;*/
+	display:none;
+}
+#menu a, #menu span
+{
+	color:black;
+	display:block;
+	padding:4px;
+}
+#menu a:hover
+{
+	background-color:cyan;
+}
+.ui.score
+{
+	text-align:right;
+	position:absolute;bottom:0px;
+	width:100%;
+	font-family:monospace;
+	padding-right:3px;
+	margin-left:-3px;
+	height:14px;
+	padding-top:2px;
+	font-size:9pt;
+}
+.dialog
+{
+	position:absolute;top:50%;left:50%;margin-top:-250px;margin-left:-250px;width:500px;height:500px;display:block;background:#ccc;display:none;
+	overflow:auto;
+	padding:4px;
+}
+.dialog h3
+{
+	padding:0px;margin:0px;text-align:center;
+}
+
+button
+{
+	border-radius:4px;background:gray;border-style:none;color:white;padding:2px 5px;
+	font-size:12pt;font-family:sans-serif;
+	box-shadow: -3px -3px 0px black;outline:none;
+	-webkit-transition: all 0.025s linear;-moz-transition: all 0.025s linear;-o-transition: all 0.025s linear;-ms-transition: all 0.025s linear;transition: all 0.025s linear;
+}
+button:active
+{
+	opacity:0.9;box-shadow: -1px -1px 1px black;margin-bottom:2px;margin-right:2px;
+	outline:none;
+}
+button.accept
+{
+	background:blue;
+}
+button.cancel
+{
+	background:red;
+}
+button.b
+{
+	position:absolute;bottom:2px;
+}
+button.r
+{
+	position:absolute;right:2px;
+}
