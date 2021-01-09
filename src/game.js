@@ -406,3 +406,4 @@ function hint()
 //DEPRECATED methods
 function autoSolveTest(mode){return gameMode.autoSolve(mode);} 
 function newGame(){return gameMode.newDeal();}
+function resetGame(){return gameMode.resetGame();}
