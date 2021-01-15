@@ -232,8 +232,11 @@ function draw()
 			scatterCards = true;
 			addMove(["scatter"]);
 			draw.ace = 0;
+			draw.nextFrame();
 		}
 	}
+	
+	draw.lastTime = performance.now();
 	
 	}catch(exception)
 	{
@@ -262,6 +265,7 @@ draw.nextFrame = function()
 	if(draw.animFrame) cancelAnimationFrame(draw.animFrame);
 	draw.animFrame=requestAnimationFrame(draw);
 }
+draw.lastTime = performance.now();
 
 function dropCard(at)
 {

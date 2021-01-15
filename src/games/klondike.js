@@ -143,7 +143,7 @@ klondike.draw = function()
 			if(talon[i].anim)
 			{
 				canvas.ctx.putImageData(talon[i].anim,0,0);
-				if(talon[i].x) talon[i].x += 5;
+				if(talon[i].x) talon[i].x += performance.now()-draw.lastTime;
 				else talon[i].x = 10;
 				if(talon[i].x >= 90) talon[i].anim = talon[i].x = false;
 				draw.nextFrame();
@@ -236,8 +236,8 @@ klondike.draw = function()
 				{
 					//aces[i][z].xdir = (Math.random()*2)-1;
 					//aces[i][z].ydir = (Math.random()*2)-1;
-					aces[i][z].xdir = Math.sin(t);
-					aces[i][z].ydir = Math.cos(t);
+					aces[i][z].xdir = Math.sin(t)+0.05;
+					aces[i][z].ydir = Math.cos(t)+0.05;
 					t+=a;
 					aces[i][z].x = x;
 					aces[i][z].y = 10;
@@ -246,12 +246,13 @@ klondike.draw = function()
 					aces[i][z].xdir = -Math.abs(aces[i][z].xdir);
 				else if(aces[i][z].x <= 0)
 					aces[i][z].xdir = Math.abs(aces[i][z].xdir);
-				else if(aces[i][z].y+back.height >= canvas.height)
+				else if(aces[i][z].y+back.height+60 >= canvas.height)
 					aces[i][z].ydir = -Math.abs(aces[i][z].ydir);
 				else if(aces[i][z].y <= 0)
 					aces[i][z].ydir = Math.abs(aces[i][z].ydir);
-				aces[i][z].x += aces[i][z].xdir*10;//*100;
-				aces[i][z].y += aces[i][z].ydir*10;//*100;
+				var time = performance.now()-draw.lastTime;
+				aces[i][z].x += aces[i][z].xdir*time*0.5;
+				aces[i][z].y += aces[i][z].ydir*time*0.5;
 				draw.ace++;
 			}
 			x += 80;
