@@ -66,6 +66,12 @@ function enable(e)
 function questionDialog(question,callback)
 {
 	//else...
+	if(window.confirm)
+	{
+		if(confirm(question))
+			callback();
+	}
+	else if(window.prompt)
 	{
 		var s=prompt(question);
 		if(s != null && s.charAt(0).toLowerCase() != 'n')
@@ -81,11 +87,12 @@ function inputDialog(msg,callback)
 	}
 }
 
-function errorDialog(msg)
+function errorDialog(msg,callback)
 {
 	//else...
 	{
 		alert(msg);
+		if(callback) callback();
 	}
 }
 
