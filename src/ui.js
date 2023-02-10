@@ -128,5 +128,35 @@ ui.restart = function()
 
 ui.importDeal = function()
 {
-	errorDialog("Broken feature.");
+	//errorDialog("Broken feature.");
+	inputDialog("Input ms/Freecell ID or 52/104 DealID",function(dealid)
+	{
+		try
+		{
+			if(!autoGameImport(dealid))
+				throw false;
+		}
+		catch(e)
+		{
+			if(e === false)
+			{
+				errorDialog("DealID couldn't be recongized.");
+			}
+			else
+			{
+				questionDialog("DealID may be incomplete or broken. Guess?",function()
+				{
+					try
+					{
+						autoGameImport(dealid,true);
+					}
+					catch(e)
+					{
+						errorDialog("Error: "+e);
+					}
+				});
+			}
+		}
+	});
+	draw();
 };

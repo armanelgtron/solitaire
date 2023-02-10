@@ -48,6 +48,8 @@ function simpleGameImport104(inp,guess)
 		}
 	}
 	used.splice(0); for(var i=tmp.length-1;i>=0;--i) { used.push(tmp[i]); }
+	
+	used.isFreecell = undefined;
 	resetGame();
 }
 
@@ -91,13 +93,56 @@ function simpleGameImport52(inp,guess)
 		}
 	}
 	used.splice(0); for(var i=tmp.length-1;i>=0;--i) { used.push(tmp[i]); }
+	
+	used.isFreecell = undefined;
+	resetGame();
+}
+
+
+function freecellExport()
+{
+	
+}
+function freecellImport(inp,guess)
+{
+	var seed = parseInt(inp);
+	var tmp = [];
+	var d;
+	//for(var i=51;i>=0;--i)
+	for(var i=0;i<52;++i)
+	{
+		switch(i%4)
+		{
+			case 0: d = 0; break;
+			case 1: d = 2; break;
+			case 2: d = 3; break;
+			case 3: d = 1; break;
+		}
+		tmp.push([d,Math.floor(i/4)]);
+	}
+	var r = 0;
+	for(var i=tmp.length-1;i>=0;--i)
+	{
+		r = ( ( seed = ( ( seed * 214013 + 2531011 ) & 0x7FFFFFFF) ) >> 16) & 0x7fff;
+		var j = r%(i+1);
+		var t = tmp[i];
+		tmp[i] = tmp[j];
+		tmp[j] = t;
+	}
+	
+	used.splice(0); for(var i=0;i<tmp.length;++i) { used.push(tmp[i]); }
+	//used.splice(0); for(var i=tmp.length-1;i>=0;--i) { used.push(tmp[i]); }
+	
+	used.isFreecell = inp;
 	resetGame();
 }
 
 function autoGameImport(inp,guess)
 {
 	inp += "";
-	if(inp.length >= 80) simpleGameImport104(inp,guess)
-	else if(inp.length >= 40) simpleGameImport52(inp,guess)
+	if(!isNaN(parseInt(inp*1))) freecellImport(inp,guess);
+	else if(inp.length >= 80) simpleGameImport104(inp,guess);
+	else if(inp.length >= 40) simpleGameImport52(inp,guess);
 	else { return false; }
+	return true;
 }

@@ -20,15 +20,10 @@
 var klondike = {name:"Klondike Solitaire"};
 gameModes.push(klondike);
 
+/*
 klondike.newDeal = function()
 {
 	used = [];
-	human = false;
-	bot = false;
-	scatterCards = false;
-	moves = []; unmoves = [];
-	startTime = Date.now();
-	score.innerText = 0;
 	
 	var card,f;
 	for(var i=52;i>0;--i)
@@ -46,28 +41,16 @@ klondike.newDeal = function()
 		used.push(card);
 	}
 	
-	var used2 = used.slice(0);
-	
-	talon = used2.splice(0,24);
-	talon.current = -1;
-	
-	aces = [[],[],[],[]];
-	
-	spaces = [];
-	for(var i=7;i>0;--i)
-	{
-		spaces.push(used2.splice(0,i));
-		var len = spaces[7-i].length-1;
-		for(var x=len;x>0;--x)
-		{
-			spaces[7-i][x].push(x==len);
-		}
-	}
-	console.log(used2);
-	usedbak = JSON.stringify(used);
-	
-	dealid.innerText = simpleGameExport52();
+	used.isFreecell = undefined;
+	this.resetGame();
 };
+//*/
+
+klondike.newDeal = function()
+{
+	freecellImport(dealid.innerText = ( parseInt(Math.random()*0x7FFFFFFF) ) );
+};
+
 
 klondike.resetGame = function()
 {
@@ -78,33 +61,52 @@ klondike.resetGame = function()
 	startTime = Date.now();
 	score.innerText = 0;
 	
+	/*
 	//var 
 	tmp = used.splice(0);
 	for(var i=0;i<52;++i)
 	{
 		used.push(tmp[i].slice(0,2));
 	}
+	*/
+	
+	for(var i=0;i<52;++i)
+	{
+		//used[i].splice(2);
+		used[i] = used[i].slice(0,2);
+	}
 	
 	var used2 = used.slice(0);
 	
 	talon = used2.splice(0,24);
+	talon.reverse();
 	talon.current = -1;
 	
 	aces = [[],[],[],[]];
 	
-	spaces = [];
+	spaces = [[],[],[],[],[],[],[]];
 	for(var i=7;i>0;--i)
 	{
-		spaces.push(used2.splice(0,i));
+		for(var z=i-1;z>=0;--z)
+		{
+			spaces[z].push((used2.splice(used2.length-1))[0]);
+		}
+	}
+	console.log(used2);
+	
+	/*for(var i=7;i>0;--i)
+	{
 		var len = spaces[7-i].length-1;
 		for(var x=len;x>0;--x)
 		{
 			spaces[7-i][x].push(x==len);
 		}
-	}
-	console.log(used2);
+	}*/
 	
-	dealid.innerText = simpleGameExport52();
+	if(used.isFreecell === undefined)
+		dealid.innerText = simpleGameExport52();
+	else
+		dealid.innerText = used.isFreecell;
 };
 
 klondike.draw = function()
